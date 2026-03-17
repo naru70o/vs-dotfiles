@@ -33,11 +33,12 @@ if system == "Linux":
             else:
                 shutil.copy2(source, destination)
                 print(f"Successfully {user_choice}ed {filename}")
-    else:
-        print("Error: VS Code config directory not found!, Please install vscode if it's not already installed")
+    else: print("Error: VS Code config directory not found!, Please install vscode if it's not already installed")
+print(input)
 status = subprocess.run(["git", "status"], cwd=current_folder)
 subprocess.run(["git", "init"], cwd=current_folder)
 subprocess.run(["git", "add", "."],cwd=current_folder)
 subprocess.run(["git", "commit", "-m", "update settings"], cwd=current_folder, check=True)
-
+subprocess.run(["git", "remote", "add", "origin", "https://github.com/naru70o/vs-dotfiles.git"], cwd=current_folder)
+subprocess.run(["git", "push", "origin", "master"], cwd=current_folder)
 
