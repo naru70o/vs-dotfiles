@@ -9,8 +9,7 @@ files_to_sync = ["settings.json","snippets"]
 user_choice = input("Do you want to 'backup' or 'restore' ?")
 print(home)
 current_folder = Path.cwd()
-commit_message=input("Please put your commit message here: ")
-
+commit = input("Wanna commit, yes(Y) or No(N): ").lower()
 if system == "Linux":
     config_dir = home / ".config/Code/User"
     
@@ -35,8 +34,9 @@ if system == "Linux":
                 shutil.copy2(source, destination)
                 print(f"Successfully {user_choice}ed {filename}")
     else: print("Error: VS Code config directory not found!, Please install vscode if it's not already installed")
-if user_choice == "backup":
-    print(input)
+# make the commit input all lowercase
+if user_choice == "backup" and (commit == "yes" or commit == "y"):
+    commit_message = input("Please put your commit message here: ")
     status = subprocess.run(["git", "status"], cwd=current_folder)
     subprocess.run(["git", "add", "."],cwd=current_folder)
     subprocess.run(["git", "commit", "-m", f"{commit_message}"], cwd=current_folder, check=True)
