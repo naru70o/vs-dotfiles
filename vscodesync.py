@@ -37,7 +37,6 @@ if system == "Linux":
 # make the commit input all lowercase
 if user_choice == "backup" and (commit == "yes" or commit == "y"):
     commit_message = input("Please put your commit message here: ")
-    status = subprocess.run(["git", "status"], cwd=current_folder)
-    subprocess.run(["git", "add", "."],cwd=current_folder)
-    subprocess.run(["git", "commit", "-m", f"{commit_message}"], cwd=current_folder, check=True)
+    subprocess.run(["git", "add", "."], cwd=current_folder)
+    subprocess.run(["git", "commit", "-m", commit_message], cwd=current_folder, check=True)
     subprocess.run(["git", "push", "origin", "master"], cwd=current_folder)
