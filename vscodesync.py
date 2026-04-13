@@ -5,25 +5,28 @@ import subprocess
 
 system = platform.system()
 home = Path.home()
-files_to_sync = ["settings.json","snippets"]
+
+config_dir = home / ".config/Code/User"
+cli_dir = home / ".vscode/extensions"
+files_to_sync = {"settings.json":config_dir,"snippets":config_dir, "extensions.json":cli_dir}
 user_choice = input("Do you want to 'backup' or 'restore' ?")
 print(home)
 current_folder = Path.cwd()
 commit = input("Wanna commit, yes(Y) or No(N): ").lower().strip()
 
 if system == "Linux":
-    config_dir = home / ".config/Code/User"
-    print("supppppppppp")
     # 1. Check if the source folder exists FIRST
-    if config_dir.exists():
+    if config_dir.exists() and cli_dir.exists():
         
         # 2. Now start sync 
-        for filename in files_to_sync:
+        for filename, source_dir in files_to_sync.items():
             if user_choice == "restore":
                 source = current_folder / filename
-                destination = config_dir / filename
+                destination = source_dir / filename
             elif user_choice == "backup":
-                source = config_dir / filename 
+
+                print(f"filename: {filename} and source: {source_dir}")
+                source = source_dir / filename 
                 destination = current_folder / filename
             else:
                 print("Invalid choice!")
@@ -38,13 +41,13 @@ if system == "Linux":
     else: print("Error: VS Code config directory not found!, Please install vscode if it's not already installed")
 elif system == "Windows":
     config_dir = home / "AppData/Roaming/Code/User"
-    if config_dir.exists():
-        for filename in files_to_sync:
+    if config_dir.exists() and cli_dir.exists():
+        for filename,source_dir  in files_to_sync.items():
             if user_choice == "restore":
                 source = current_folder / filename
-                destination = config_dir / filename
+                destination = source_dir / filename
             elif user_choice == "backup":
-                source = config_dir / filename 
+                source = source_dir / filename 
                 destination = current_folder / filename
             elif user_choice == "skip":
                 break
@@ -61,7 +64,6 @@ elif system == "Windows":
             else:
                 print(f"Error: {filename} not found!")
     else: print("Error: VS Code config directory not found!, Please install vscode if it's not already installed")
-
 # make the commit input all lowercase
 if user_choice == "backup" or user_choice == "skip" and (commit == "yes" or commit == "y"):
     commit_message = input("Please put your commit message here: ")
